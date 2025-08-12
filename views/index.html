@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Profile</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h1>User Profile</h1>
+
+    <!-- View Mode -->
+    <div id="profile-container" class="hidden profile-card">
+        <img id="view-image" class="profile-img" alt="Profile Picture">
+        
+        <p><b>Name:</b> <span id="view-name" class="bold-text"></span></p>
+        <hr>
+        <p><b>Email:</b> <span id="view-email" class="bold-text"></span></p>
+        <hr>
+        <p><b>Interests:</b> <span id="view-interests" class="bold-text"></span></p>
+        <hr>
+
+        <button id="edit-btn">Edit Profile</button>
+    </div>
+
+    <!-- Edit Mode -->
+    <form id="profile-form" action="/save-profile" method="POST" enctype="multipart/form-data" class="profile-card">
+        <label>Name:</label><br>
+        <input type="text" name="name" required><br><br>
+
+        <label>Email:</label><br>
+        <input type="email" name="email" required><br><br>
+
+        <label>Interests:</label><br>
+        <textarea name="interests"></textarea><br><br>
+
+        <label>Profile Image:</label><br>
+        <input type="file" name="profileImage" accept="image/*"><br><br>
+
+        <div id="preview-container">
+            <img id="preview-image" class="profile-img hidden">
+        </div>
+
+        <button type="submit">Save Profile</button>
+    </form>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>

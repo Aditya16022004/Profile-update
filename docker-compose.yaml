@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:latest
+    container_name: adityadb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: Aditya
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: ${DB_NAME:-user-account}
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./mongo-init:/docker-entrypoint-initdb.d:ro
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # MongoExpress (MongoDB Web Interface)
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-exp
+    restart: unless-stopped
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: Aditya
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+      ME_CONFIG_MONGODB_URL: mongodb://Aditya:password@mongodb:27017/
+      ME_CONFIG_BASICAUTH_USERNAME: Aditya
+      ME_CONFIG_BASICAUTH_PASSWORD: password
+    ports:
+      - "8081:8081"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  # Node.js Application
+  app:
+    build: .
+    container_name: user-profile-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      MONGO_URL: mongodb://Aditya:password@mongodb:27017/
+      DB_NAME: ${DB_NAME:-user-account}
+      COLLECTION_NAME: ${COLLECTION_NAME:-user-details}
+    volumes:
+      - ./uploads:/app/uploads
+      - ./config.env:/app/config.env:ro
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - app-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  app-network:
+    driver: bridge
