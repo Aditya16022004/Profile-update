@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # User Profile Demo
 
 A simple user profile management application with MongoDB persistence, built with Node.js and Express.
@@ -169,3 +170,6 @@ user-profile-demo/
 ## License
 
 This project is for demonstration purposes.
+=======
+# Profile-update
+>>>>>>> 821086aa26f95097b4d5301f30b1c4090f64d448
